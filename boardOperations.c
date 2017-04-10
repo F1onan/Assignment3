@@ -20,53 +20,51 @@
  * Parameters:
  * 	size: the size of the board
  * 	upLeft: pointer of pointer to slot at position (0, 0)
- * 	upRight: pointer of pointer to slot at position (0, boardSize -1)
+ * 	upRight: pointer of pointer to slot at position (0, 7 -1)
  * 	downLeft: pointer of pointer to slot at position (boardSsize -1, 0)
- * 	upLeft: pointer of pointer to slot at position (boardSize - 1, boardSize -1)
+ * 	upLeft: pointer of pointer to slot at position (7 - 1, 7 -1)
  */
-void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight){
+void createBoard(struct slot ** board, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight){
 
-	//The board is represented as a pointer of pointer to slots
-	//This allocates in memory the space for the pointers to each row of the board
-	struct slot ** board = malloc(boardSize * sizeof(struct slot *));
 	srand(time(NULL)); //Seed the random number generator
 
 	int a;
-	printf("Board:\n");
+	printf("Slot Types:\n");
 	for(a=0;a<=30;a++)
 	{
 		printf("_");
 	}
 
 
-	for(int i =0; i< boardSize; i++)
+	for(int i =0; i< 7; i++)
 	{
 		printf("\n| ");
 		//This allocates in memory the space for the slots in each row of the board
-		board[i] = malloc(boardSize * sizeof(struct slot));
+		board[i] = malloc(7 * sizeof(struct slot));
 
 		//For each slot it sets up the row and column number
-		for(int j=0;j < boardSize; j++)
+		for(int j=0;j < 7; j++)
 		{
 			board[i][j].row = i;
 			board[i][j].column = j;
+			board[i][j].capacity = 0;
+
 			/*Randomly set the type of each slot:*/
+		    int dice = rand() % 3; //Roll the imaginary 3 sided dice
 
-				int dice = rand() % 3; //Roll the imaginary 3 sided dice
+			switch(dice){
 
-				switch(dice){
-
-				case 0:
+			case 0:
 				  board[i][j].slotType = Ground;
 				  break;
-				case 1:
+			case 1:
 				  board[i][j].slotType = City;
 				   break;
-				case 2:
+			case 2:
 				  board[i][j].slotType = Hill;
 				  break;
 
-				}
+			}
 		 printf("[%s] ", getSlotName(board[i][j].slotType)); //Print out the type of slot[i][j]
 		}
 	printf("|");
@@ -78,25 +76,23 @@ void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, str
 		printf("_");
 	}
 
-	printf("\n|");
-
-
-	//This sets up the adjacent slots for the slots that are
+	//It sets up the adjacent slots for the slots that are
 	//not at the borders. These slots have 4 adjacent elements
-	for(int i =1; i< boardSize-1; i++)
+	for(int i=0; i< 7; i++)
 	{
-		for(int j=1;j < boardSize-1; j++)
+		for(int j=0;j < 7; j++)
 		{
-			board[i][j].up = &board[i-1][j]; //^
-			board[i][j].right = &board[i][j+1];//>
-			board[i][j].down = &board[i+1][j];//V
-			board[i][j].left = &board[i][j-1];//<
+			board[i][j].up = &board[i-1][j];
+			board[i][j].right = &board[i][j+1];
+			board[i][j].down = &board[i+1][j];
+			board[i][j].left = &board[i][j-1];
 		}
 	}
 
-	//This sets up the adjacent slots for the slots that are
+	//It sets up the adjacent slots for the slots that are
 	//in the first and the last row, except the slots at the edges.
-	for(int j = 1; j < boardSize -1; j++)
+
+	for(int j = 0; j < 6; j++)
 	{
 		//It sets up the adjacent slots for the slots that are in the first row.
 		//These slots don't have an adjacent element on top of them
@@ -108,28 +104,29 @@ void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, str
 		//It sets up the adjacent slots for the slots that are in the last row.
 		//These slots don't have an adjacent element on down them
 		// because they are on the last row of the board
-		board[boardSize - 1][j].right = &board[boardSize - 1][j+1];
-		board[boardSize -1][j].left = &board[boardSize - 1][j-1];
-		board[boardSize - 1][j].up = &board[boardSize - 2][j];
+		board[6][j].right = &board[6][j+1];
+		board[6][j].left = &board[6][j-1];
+	    board[6][j].up = &board[5][j];
 	}
 
 	//It sets up the adjacent slots for the slots that are
 	//in the first and the last column, except the slots at the edges.
-	//
-	for(int i = 1; i < boardSize -1; i++){
-		//It sets up the adjacent slots for the slots that are in the first row.
+
+	for(int i = 1; i < 7 -1; i++)
+	{
+		//It sets up the adjacent slots for the slots that are in the first column.
 		//These slots don't have an adjacent element on the left
 		// because they are on the first column of the board
 		board[i][0].right = &board[i][1];
 		board[i][0].up = &board[i-1][0];
 		board[i][0].down = &board[i+1][0];
 
-		//It sets up the adjacent slots for the slots that are in the last row.
+		//It sets up the adjacent slots for the slots that are in the last column.
 		//These slots don't have an adjacent element on the right
 		// because they are on the last column of the board
-		board[i][boardSize-1].left = &board[boardSize - 1][boardSize-2];
-		board[i][boardSize -1].up = &board[i -1][boardSize-1];
-		board[i][boardSize -1].down = &board[i+1][boardSize -1];
+		board[i][7-1].left = &board[i][5];
+		board[i][7 -1].up = &board[i -1][6];
+	    board[i][7 -1].down = &board[i+1][6];
 	}
 
 
@@ -138,31 +135,35 @@ void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, str
 	board[0][0].right = &board[0][1];
 	board[0][0].down = &board[1][0];
 
-	//It sets up the adjacent slots for the slot at position (0,boardSize -1).
+	//It sets up the adjacent slots for the slot at position (0,6).
 	//This only has only 2 adjacent slots: left and down
-	board[0][boardSize-1].left = &board[0][boardSize-2];
-	board[0][boardSize -1].down = &board[1][boardSize -1];
+	board[0][6].left = &board[0][5];
+	board[0][6].down = &board[1][6];
 
-	//It sets up the adjacent slots for the slot at position (boarSize -1 ,0).
+	//It sets up the adjacent slots for the slot at position (6 ,0).
 	//This only has only 2 adjacent slots: up and right
-	board[boardSize -1][0].right = &board[boardSize -1][1];
-	board[boardSize -1][0].up = &board[boardSize -2][0];
+	board[6][0].right = &board[6][1];
+	board[6][0].up = &board[5][0];
 
-	//It sets up the adjacent slots for the slot at position (boarSize -1 ,boardSize-1).
+	//It sets up the adjacent slots for the slot at position (6,6).
 	//This only has only 2 adjacent slots: up and left
-	board[boardSize - 1][boardSize-1].up = &board[boardSize-2][boardSize-1];
-	board[boardSize - 1][boardSize -1].left = &board[boardSize -1][boardSize -2];
+	board[6][6].up = &board[5][6];
+	board[6][6].left = &board[6][5];
+
+
+
+
 
 	//assigns a pointer to slot at position (0, 0)
 	*upLeft = &board[0][0];
-	//assigns pointer of pointer to slot at position (0, boardSize -1)
-	*upRight = &board[0][boardSize -1];
-	//assigns pointer of pointer to slot at position ( boardSize -1,)
-	*downLeft = &board[boardSize -1][0];
-	//assigns pointer of pointer to slot at position (boardSize -1, boardSize -1)
-	*downRight = &board[boardSize -1][boardSize -1];
-
+	//assigns pointer of pointer to slot at position (0, 7 -1)
+	*upRight = &board[0][6];
+	//assigns pointer of pointer to slot at position ( 7 -1,)
+	*downLeft = &board[6][0];
+	//assigns pointer of pointer to slot at position (7 -1, 7 -1)
+    *downRight = &board[6][6];
 }
+
 
 
 
@@ -225,7 +226,7 @@ void reachDesiredElement(int row, int column, struct slot * initialSlot){
 		//if the current slot is at a column and a row equal to the desired column and row, respectively
 		// we found the slot
 		if(currentSlot->column == column && currentSlot->row == row){
-			printf("Found\n");
+			//printf("Found\n");
 			found = true;
 		}
 

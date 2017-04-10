@@ -11,10 +11,9 @@
 
 #define MAXNAMELEN 25//Max length of a player's name
 #define MAXPLAYERS 6//Max number of players
-#define MAXSLOTS 20 //Max number of slots
 
 typedef int bool;
-enum { false , true };
+enum { false , true };//This allows boolean logic to function as it should
 enum sType {Ground, City, Hill};
 enum cType {Elf, Human, Ogre, Wizard};
 
@@ -29,7 +28,12 @@ int strength;
 int magic;
 int luck;
 int dexterity;
-int currentslot;
+int order;//Player's position in playersHere (this is for when a slot has more than one player)
+bool dead;
+
+int row;
+int column;
+
 int data;
 struct Characters *next;
 }players[1]; //Declare the array, players (initialize as being of size 1, but then dynamically expand this size later)
@@ -38,28 +42,31 @@ struct Characters *next;
 struct slot //Declare a new structure containing the stats for all players
 {
   enum sType slotType; //Slot type (Ground, City or Hill) for each slot
-  int full; //Boolean array to track which slot positions are full (1 = full, 0 = empty)
-  int currentplayer; //The player number (between 0 and numofplayers) that is currently occupying this slot
-  int data;
-  struct Slotstruct *next;
+  int playersHere[6]; //The player number (between 0 and numofplayers) that is currently occupying this slot
+  int capacity;//The number of players occupying this slot (0-numofplayers)
 
   int row;
   int column;
+
   struct slot *left;
   struct slot *right;
   struct slot *up;
   struct slot *down;
-}slot[1];
+};
+
 
 
 //FUNCTION PROTOTYPES:
 int getBoardSize();
-void getDesiredElement(int * row, int * col, int currentPlayer);
-void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight);
+void createBoard(struct slot **board, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight);
 void reachDesiredElement(int row, int column, struct slot * initialSlot);
 const char* getSlotName(enum sType slotType);
 const char* getClassName(enum cType class);
 void assignPlayers(int *numofplayers);
 void abilities(int numofplayers, int i);
+void findSlots(int reqDist, int currDist, struct slot *currSlot, struct slot *foundSlots,
+			   int *count, bool explored[7][7]);
+void move(int numofplayers, int currentplayer, int row, int column,struct slot **board, int *numLeft);
+void printBoard(struct slot **board);
 
 #endif /* OPERATIONS_H_ */

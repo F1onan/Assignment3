@@ -7,46 +7,40 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "header.h"
-
-//THis function takes as input the size of the board and the pointers
-// to the integers representing the row and the column of the slot that
-// the user want to retrieve
-void getDesiredElement(int * row, int * col, int currentPLayer){
-	printf("\n\nPlease enter the slot you would to begin at:\n");
-
-		//it will cycle asking the user to insert the row
-		//until the value of the desired row is >= 0 or < of the
-		// size of the board
-		do {
-			printf("Row: ");
-			scanf("%d", row);
-			printf("%d\n", *row);
-			if(*row < 0 || *row >= 7)
-				printf("\nError: Incorrect row dimension, try again!\n");
-		} while(*row < 0 || *row >= 7);
-
-		//it will cycle asking the user to insert the column
-		//until the value of the desired row is >= 0 or < of the
-		// size of the board
-		do {
-			printf("Column: ");
-			scanf("%d", col);
-			printf("%d\n", *col);
-			if(*col < 0 || *col >= 7)
-				printf("\nError: Incorrect column dimension, try again!\n");
-		} while(*col < 0 || *col >= 7);
-}
 
 void assignPlayers(int *numofplayers){
 
 	unsigned int i;
 	int choice;
+	struct Characters *first, *current, *last;
 
 	do{
 		printf("\n\nHow many people are playing?\n");
 		scanf("%d", &*numofplayers);
 		}while(*numofplayers<2 || *numofplayers > MAXPLAYERS); //Ensures a valid input
+
+	//Dynamically allocate the appropriate space in memory for players[]
+	  for (int i = 0; i < *numofplayers; i++)
+	    {
+	        last = malloc (sizeof (players));
+	        last->data = i;
+	        last->next = NULL;
+	        if(i==0)
+	        {
+	        	first = last;
+	        }
+	        else
+	        	current-> next = last;
+	        current = last;
+	    }
+
+	    current = first;
+	    while (current != NULL)
+	    {
+	        current = current->next;
+	    }
 
 	for(i=0;i<*numofplayers;i++)
 		{
@@ -87,4 +81,42 @@ void assignPlayers(int *numofplayers){
 		}
 
 
+}
+
+//Function which prints the current position of players
+void printBoard(struct slot **board)
+{
+	int a;
+	printf("\nCurrent Board State:\n");
+	for(a=0;a<=30;a++)
+	{
+		printf("_");
+	}
+
+
+	for(int i =0; i< 7; i++)
+	{
+		printf("\n| ");
+
+		//For each slot it sets up the row and column number
+		for(int j=0;j < 7; j++)
+		{
+		 printf("[");
+		 if(board[i][j].capacity > 1)
+		   printf("+"); //Print out the player here
+		 else if(board[i][j].capacity == 1)
+		   printf("%d", board[i][j].playersHere[0]+1); //Print out the player here
+		 else if(board[i][j].capacity == 0)
+			 printf(" ");
+		 printf("] ");
+		}
+	printf("|");
+	}
+
+	printf("\n");
+	for(a=0;a<=30;a++)
+	{
+		printf("_");
+	}
+	printf("\n\n");
 }

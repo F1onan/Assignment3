@@ -22,6 +22,7 @@ void abilities(int numofplayers, int i)
     players[i].magic = 100;
     players[i].luck = 100;
     players[i].dexterity = 100;
+    players[i].dead = false;
 
     if(players[i].class == 0)//If the player is an elf
         {
@@ -111,6 +112,11 @@ void abilities(int numofplayers, int i)
             players[i].dexterity = j;
         }
 
+    //Get the player's name:
+	printf("Please enter a name for player %d:\n", i+1);
+	scanf("%24s", players[i].name);
+
+
     printf("\nPlayer %d's Stats:\n", i+1);
     printf("Name = %s\n", players[i].name);
     printf("Class = %s\n", getClassName(players[i].class));
@@ -119,10 +125,12 @@ void abilities(int numofplayers, int i)
     printf("Strength = %d\n", players[i].strength);
     printf("Magic = %d\n", players[i].magic);
     printf("Luck = %d\n", players[i].luck);
-    printf("Dexterity = %d\n\n", players[i].dexterity);
+    printf("Dexterity = %d\n", players[i].dexterity);
 
 }
 
+
+//Function which returns the appropriate string name for each element of the enum, players[].class.
 const char* getClassName(enum cType class)
 {
    switch (class)
