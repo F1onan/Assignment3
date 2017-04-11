@@ -226,13 +226,24 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 		     if(attackChoice==2)
 		     {
-			   //CODE FOR DISTANT ATTACK
-			   break;
+
+
+		     break;
 		     }
 
 		     if(attackChoice==3)
 		     {
-			   //CODE FOR MAGIC ATTACK
+		       printf("\nEnter the number of the player you would like to attack. Possible choices:\n");
+
+		       for(i=0; i<numofplayers; i++)
+		       {
+		    	   printf("Player %d\n", players[i]);
+		       }
+
+		       scanf("%d", &attackedPlayer);
+
+		       attack(currentPlayer, attackedPlayer, 3);
+
 			   break;
 		     }
 
