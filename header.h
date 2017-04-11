@@ -68,5 +68,6 @@ void findSlots(int reqDist, int currDist, struct slot *currSlot, struct slot *fo
 			   int *count, bool explored[7][7]);
 void move(int numofplayers, int currentplayer, int row, int column,struct slot **board, int *numLeft);
 void printBoard(struct slot **board);
+void attack(int currentPlayer, int attackedPlayer, int attackType);
 
 #endif /* OPERATIONS_H_ */

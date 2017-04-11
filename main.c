@@ -50,7 +50,7 @@ int main(void)
 
 		board[players[i].row][players[i].column].capacity++;//Set the boolean value, full, for the slot occupied by player #i to be true
 
-		players[i].order=board[players[i].row][players[i].column].capacity;//The players position in playersHere
+		players[i].order=board[players[i].row][players[i].column].capacity-1;//The players position in playersHere
 		board[players[i].row][players[i].column].playersHere[board[players[i].row][players[i].column].capacity-1]=i;//Assign the appropriate slot with the current player
 
 
