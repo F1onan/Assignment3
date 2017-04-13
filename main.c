@@ -89,13 +89,22 @@ int main(void)
 
 		for(i=0; i<numofplayers; i++)
 		{
-			printBoard(board);
-			move(numofplayers, i, players[i].row, players[i].column, board, &numLeft);
+			if(players[i].dead==false)//If the player is still alive
+				printBoard(board);
+		    	move(numofplayers, i, players[i].row, players[i].column, board, &numLeft);
 		}
-		printf("THERE ARE %d PLAYERS LEFT", numLeft);
+		if(numLeft>1)
+			printf("\nTHERE ARE %d PLAYERS LEFT!", numLeft);
 		round++;
 	 }
 
+	 //Search for the one remaining player who isn't dead
+	 for(i=0; i<numofplayers; i++)
+	 {
+		 if(players[i].dead == false)
+			 printf("\nPlayer #%d (%s) won the game with %.0f health remaining!", i+1, players[i].name, players[i].life);
+	 }
 
-		return 0;
+
+  return 0;
 }

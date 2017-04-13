@@ -5,7 +5,7 @@
 
 void move(int numofplayers, int currentPlayer, int row, int column, struct slot **board, int *numLeft)
 {
-	unsigned int choice, moveChoice, i;
+	unsigned int choice, moveChoice, i, j;
 	bool upBlocked=false;
 	bool downBlocked=false;
 	bool rightBlocked=false;
@@ -158,6 +158,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 		     if(attackChoice==1)
 		     {
+		    	//Find which slots have no available targets to attack:
 			    if(row == 0 || board[row][column].up->capacity == 0)
 			        upBlocked=true;
 			    if(row == 6 || board[row][column].down->capacity == 0)
@@ -169,7 +170,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 			    if(board[row][column].capacity==1 && upBlocked==true && downBlocked==true && leftBlocked==true && rightBlocked==true)
 			    {
 			    	//If the player tries to choose near-attack, when there are no nearby players
-			    	printf("\nNo nearby players found! Player %d passes this round\n", currentPlayer+1);
+			    	printf("\nPlayer %d tries to attack any nearby players.\nThere are no nearby players\nPlayer %d is an idiot.\n", currentPlayer+1, currentPlayer+1);
 			    	break;
 			    }
 			    else
@@ -224,25 +225,66 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 			    break;
 		     }
 
+			 validChoice=false;
 		     if(attackChoice==2)
 		     {
+		    	struct slot* currSlot = NULL;//Don't point it to anything initially
+		    	struct slot* foundSlots;
+		    	bool explored[7][7]; //Eventually every element will be set to true
+		    	int count = 0;
+		    	int reqDist = 3;
 
+		 		*currSlot = board[0][0];
 
-		     break;
+		 		for(unsigned int i=0; i<7;i++)
+		 		{
+		 			for(j=0; j<7;j++)
+		 			{
+		 				//Initialize all elements of explored to false
+		 				explored[i][j] = false;
+		 			}
+		 		}
+
+		 		foundSlots = malloc(16 * sizeof(struct slot));
+
+		 		if(currSlot!=NULL)
+		 		{
+		 			findSlots(reqDist, 0, currSlot, foundSlots, &count, explored);
+
+		 			for (unsigned int i=0; i<count; i++)
+		 			{
+		 				printf("(%d,%d)->", foundSlots[i].row, foundSlots[i].column);
+		 			}
+		 		}
+
+		 		for (i=0; i<7; i++)
+		 		{
+		 			for(j=0;j<7;j++)
+		 			{
+		 				if(explored[i][j] == true && board[i][j].capacity>1)
+		 				{
+		 					for(b=0; b<board[i][j].capacity;b++)
+		 						attackablePlayers[b]=board[i][j].playersHere[b+1];
+		 				}
+		 			}
+		 		}
+			   break;
 		     }
 
 		     if(attackChoice==3)
 		     {
-		       printf("\nEnter the number of the player you would like to attack. Possible choices:\n");
+			      printf("\nEnter the number of the player you would like to attack. Possible choices:\n");
 
-		       for(i=0; i<numofplayers; i++)
-		       {
-		    	   printf("Player %d\n", players[i]);
-		       }
+			      for(b=0; b<numofplayers; b++)
+			        {
+			          if(b!=currentPlayer && players[b].dead==false)
+			          {
+			    		  attackablePlayers[b]=b+1;
+			    		  printf("Player %d\n", attackablePlayers[b]);
+			          }
+			        }
 
-		       scanf("%d", &attackedPlayer);
-
-		       attack(currentPlayer, attackedPlayer, 3);
+			      attack(currentPlayer, attackedPlayer, 3);
 
 			   break;
 		     }
@@ -252,6 +294,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 	   case 3://Quit the game
 	   {
+		   (*numLeft)--;
 		   players[currentPlayer].dead=true; //rip
 		   break;
 	   }

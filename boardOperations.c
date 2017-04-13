@@ -53,7 +53,7 @@ void createBoard(struct slot ** board, struct slot **upLeft, struct slot **upRig
 		    int dice = rand() % 3; //Roll the imaginary 3 sided dice
 
 			switch(dice){
-
+			if(board[i][j].slotType==0)
 			case 0:
 				  board[i][j].slotType = Ground;
 				  break;
@@ -226,14 +226,14 @@ void reachDesiredElement(int row, int column, struct slot * initialSlot){
 		//if the current slot is at a column and a row equal to the desired column and row, respectively
 		// we found the slot
 		if(currentSlot->column == column && currentSlot->row == row){
-			//printf("Found\n");
+			printf("Found\n");
 			found = true;
 		}
 
 	}
 }
 
-//Short function which gets the appropriate slot-type string for the printf function in createBoard.
+//Short function which gets the appropriate slot-type character for the printf function in createBoard.
 const char* getSlotName(enum sType slotType)
 {
    switch (slotType)

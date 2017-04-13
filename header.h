@@ -57,17 +57,28 @@ struct slot //Declare a new structure containing the stats for all players
 
 
 //FUNCTION PROTOTYPES:
-int getBoardSize();
+
 void createBoard(struct slot **board, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight);
+//^Creates the board as a linked list
 void reachDesiredElement(int row, int column, struct slot * initialSlot);
+//^Searches for the slot each player is on
 const char* getSlotName(enum sType slotType);
+//^Essentially allows createBoard to print out H for hill, C for City and G for Ground
 const char* getClassName(enum cType class);
+//^Used to print out the class name
 void assignPlayers(int *numofplayers);
+//Sets numofplayers and assignes the names and classes to each player
 void abilities(int numofplayers, int i);
+//Assigns each players abilties (eg. luck, dexterity etc.)
 void findSlots(int reqDist, int currDist, struct slot *currSlot, struct slot *foundSlots,
 			   int *count, bool explored[7][7]);
+//Used to find available slots for distant attack
 void move(int numofplayers, int currentplayer, int row, int column,struct slot **board, int *numLeft);
+//Implementation of each player's "move" (i.e. Go to another slot, attack or quit the game)
 void printBoard(struct slot **board);
+//prints the board before each player's move
 void attack(int currentPlayer, int attackedPlayer, int attackType);
+//Implements each of the three different types of attacks (near, distant, magic)
+
 
 #endif /* OPERATIONS_H_ */
