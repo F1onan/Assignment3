@@ -232,9 +232,10 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		    	struct slot* foundSlots;
 		    	bool explored[7][7]; //Eventually every element will be set to true
 		    	int count = 0;
-		    	int reqDist = 3;
+		    	int reqDist = 2;
 
-		 		*currSlot = board[0][0];
+		 		currSlot = reachDesiredElement(row, column, &board[0][0]);
+		 		printf("CurrSlot = %d,%d", currSlot->row, currSlot->column);
 
 		 		for(unsigned int i=0; i<7;i++)
 		 		{
@@ -245,11 +246,14 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		 			}
 		 		}
 
-		 		foundSlots = malloc(16 * sizeof(struct slot));
+
+		 		foundSlots = malloc(7 * 7 * sizeof(struct slot));
+
 
 		 		if(currSlot!=NULL)
 		 		{
-		 			findSlots(reqDist, 0, currSlot, foundSlots, &count, explored);
+		 			//for(reqDist=2;reqDist<5;reqDist++)
+		 				findSlots(reqDist, 0, currSlot, foundSlots, &count, explored);
 
 		 			for (unsigned int i=0; i<count; i++)
 		 			{
@@ -257,7 +261,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		 			}
 		 		}
 
-		 		for (i=0; i<7; i++)
+		 	/*	for (i=0; i<7; i++)
 		 		{
 		 			for(j=0;j<7;j++)
 		 			{
@@ -268,6 +272,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		 				}
 		 			}
 		 		}
+		 		*/
 			   break;
 		     }
 
