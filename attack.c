@@ -37,16 +37,12 @@ void attack(int currentPlayer, int attackedPlayer, int attackType)
 
 
 	case 3://magic-attack
-		if(players[attackedPlayer-1].strength<=70)
-		{
-			players[attackedPlayer-1].life -= 0.5 * players[currentPlayer].strength;
-			printf("\nPlayers #%d's new life: %.0lf\n", attackedPlayer, players[attackedPlayer-1].life);
-		}
-		if(players[attackedPlayer-1].strength>70)
-		{
-			players[currentPlayer].life-= 0.3 * players[attackedPlayer-1].life;
-			printf("\nPlayers #%d's new life: %.0lf\n", currentPlayer+1, players[currentPlayer].life);
-		}
+
+		  if((players[currentPlayer].smartness + players[currentPlayer].magic) > 150)
+		                {
+		                    players[attackedPlayer-1].life -= ((players[currentPlayer].magic * 0.5) + (players[currentPlayer].smartness * 0.2));
+		                    printf("\nPlayers #%d's new life: %.0lf\n", attackedPlayer-1, players[attackedPlayer-1].life);
+		                }
 		break;
 
 	}
