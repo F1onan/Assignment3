@@ -4,8 +4,6 @@
 
 void findSlots(int reqDist, int currDist,  struct slot * currSlot, struct slot * foundSlots, int * count,  bool explored[7][7])
 {
-	static int test=1;
-	printf("\nThis function has been entered %d times", test++);
 	//The base case: the current slot is at the required distance from the starting slot
 	if(currDist == reqDist){
 		//the current slot was not explored

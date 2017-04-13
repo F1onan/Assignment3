@@ -11,6 +11,7 @@
 
 #define MAXNAMELEN 25//Max length of a player's name
 #define MAXPLAYERS 6//Max number of players
+#define boardSize 7
 
 typedef int bool;
 enum { false , true };//This allows boolean logic to function as it should

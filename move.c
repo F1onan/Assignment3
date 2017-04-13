@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include "header.h"
 
 void move(int numofplayers, int currentPlayer, int row, int column, struct slot **board, int *numLeft)
@@ -252,7 +251,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 		 		if(currSlot!=NULL)
 		 		{
-		 			//for(reqDist=2;reqDist<5;reqDist++)
+		 			for(reqDist=2;reqDist<5;reqDist++)
 		 				findSlots(reqDist, 0, currSlot, foundSlots, &count, explored);
 
 		 			for (unsigned int i=0; i<count; i++)
