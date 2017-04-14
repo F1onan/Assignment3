@@ -43,7 +43,6 @@ void attack(int currentPlayer, int attackedPlayer, int attackType)
 		  }
 		break;
 
-	}
 
 	}
 }
