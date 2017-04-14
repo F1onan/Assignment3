@@ -45,7 +45,7 @@ void assignPlayers(int *numofplayers){
 	for(i=0;i<*numofplayers;i++)
 		{
 		do{
-			printf("\nPlayer %d's Class: (1)Elf (2)Human (3)Ogre (4)Wizard:\n ", i+1);
+			printf("\nPlayer %d's Class: (1)Elf (2)Human (3)Ogre (4)Wizard:\n", i+1);
 			scanf("%d", &choice);
 		   }while(choice!=1 && choice!=2 && choice!=3 && choice!=4); //Ensures a valid input
 

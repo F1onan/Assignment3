@@ -59,7 +59,7 @@ struct slot //Declare a new structure containing the stats for all players
 
 //FUNCTION PROTOTYPES:
 
-void createBoard(struct slot **board, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight);
+void createBoard(struct slot **board);
 //^Creates the board as a linked list
 struct slot * reachDesiredElement(int row, int column, struct slot * initialSlot);
 //^Searches for the slot each player is on

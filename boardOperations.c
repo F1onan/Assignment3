@@ -24,7 +24,7 @@
  * 	downLeft: pointer of pointer to slot at position (boardSsize -1, 0)
  * 	upLeft: pointer of pointer to slot at position (7 - 1, 7 -1)
  */
-void createBoard(struct slot ** board, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight){
+void createBoard(struct slot ** board){
 
 	srand(time(NULL)); //Seed the random number generator
 
@@ -37,16 +37,45 @@ void createBoard(struct slot ** board, struct slot **upLeft, struct slot **upRig
 
 
 
-	for(int i =0; i< boardSize; i++){
+	for(int i =0; i< boardSize; i++)
+	{
+		printf("\n| ");
 		//This allocates in memory the space for the slots in each row of the board
 		board[i] = malloc(boardSize * sizeof(struct slot));
 
 		//For each slot it sets up the row and column number
-		for(int j=0;j < boardSize; j++){
+		for(int j=0;j < boardSize; j++)
+		{
 			board[i][j].row = i;
 			board[i][j].column = j;
+			board[i][j].capacity = 0;
+
+			            /*Randomly set the type of each slot:*/
+            int dice = rand() % 3; //Roll the imaginary 3 sided dice
+
+            switch(dice)
+            {
+            if(board[i][j].slotType==0)
+            case 0:
+                  board[i][j].slotType = Ground;
+                  break;
+            case 1:
+                  board[i][j].slotType = City;
+                   break;
+            case 2:
+                  board[i][j].slotType = Hill;
+                  break;
+            }
+		    printf("[%s] ", getSlotName(board[i][j].slotType)); //Print out the type of slot[i][j]
 		}
+	printf("|");
 	}
+
+    printf("\n");
+    for(a=0;a<=30;a++)
+    {
+        printf("_");
+    }
 
 	//It sets up the adjacent slots for the slots that are
 	//not at the borders. These slots have 4 adjacent elements
@@ -122,21 +151,7 @@ void createBoard(struct slot ** board, struct slot **upLeft, struct slot **upRig
 		board[boardSize - 1][boardSize-1].up = &board[boardSize-2][boardSize-1];
 		board[boardSize - 1][boardSize -1].left = &board[boardSize -1][boardSize -2];
 
-
-
-
-
-
-
-	//assigns a pointer to slot at position (0, 0)
-	*upLeft = &board[0][0];
-	//assigns pointer of pointer to slot at position (0, boardSize -1)
-	*upRight = &board[0][boardSize -1];
-	//assigns pointer of pointer to slot at position ( boardSize -1,)
-	*downLeft = &board[boardSize -1][0];
-	//assigns pointer of pointer to slot at position (boardSize -1, boardSize -1)
-	*downRight = &board[boardSize -1][boardSize -1];
-	}
+}
 
 
 
