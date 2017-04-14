@@ -219,7 +219,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 			    }
 			    }while(validChoice==false);
 
-			    attack(currentPlayer, attackedPlayer, 1);
+			    attack(currentPlayer, attackedPlayer, 1, board, numLeft);
 
 			    break;
 		     }
@@ -234,7 +234,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		    	int reqDist;
 		    	bool tooClose;
 
-		    	printf("\nEnter the number of the player you would like to attack. Possible choices:\n");
+		    	printf("\nEnter the number of the player you would like to attack.\nPossible choices:\n");
 
 				if(players[currentPlayer].row >= 3)
 				{
@@ -309,7 +309,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		 						{
 		 						//^If this isnt the currentPlayer
 		 						attackablePlayers[b]=board[foundSlots[i].row][foundSlots[i].column].playersHere[b];
-		 						printf("\nPlayer %d can be attacked", attackablePlayers[b]+1);
+		 						printf("Player %d\n", attackablePlayers[b]+1);
 		 						}
 		 					}
 		 				}
@@ -318,23 +318,45 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 		 		}
 
+			  do{
+				  validChoice=false;
+			      scanf("%d", &attackedPlayer);
+			      for(i=0;i<b;i++)
+			      {
+			    	  if(attackedPlayer == attackablePlayers[i])//If the selected player can de attacked
+			    		  validChoice=true;
+			      }
+			  }while(validChoice==false);
 
+			  attack(currentPlayer, attackedPlayer, 2, board, numLeft);
 
-
-			   break;
+			  break;
 		     }
 
 		     if(attackChoice==3)
 		     {
-			      printf("\nEnter the number of the player you would like to attack. Possible choices:\n");
+			      printf("\nEnter the number of the player you would like to attack.\nPossible choices:\n");
 
 			      for(b=0; b<numofplayers; b++)
 			        {
 			          if(b!=currentPlayer && players[b].dead==false)
+			          {
 			    		  attackablePlayers[b]=b+1;//Assign with the player NUMBER
+			          	  printf("Player %d\n",  attackablePlayers[b]);
+			          }
 			        }
 
-				    attack(currentPlayer, attackedPlayer, 3);
+			      do{
+				  validChoice=false;
+			      scanf("%d", &attackedPlayer);
+			      for(i=0;i<b;i++)
+			      {
+			    	  if(attackedPlayer == attackablePlayers[i])//If the selected player can de attacked
+			    		  validChoice=true;
+			      }
+			      }while(validChoice==false);
+
+				  attack(currentPlayer, attackedPlayer, 3, board, numLeft);
 
 			   break;
 		     }
@@ -344,10 +366,30 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 	   case 3://Quit the game
 	   {
-		   (*numLeft)--;
-		   players[currentPlayer].dead=true; //rip
+		   players[currentPlayer].life=0;
 		   break;
 	   }
 
 	 }//End of switch(choice)
+
+	 //If the player died this turn
+	 if(players[currentPlayer].life<1)
+	 {
+		int q = players[currentPlayer].order-1;
+
+		while (q<board[row][column].capacity-1)
+		{
+			board[row][column].playersHere[q]=board[row][column].playersHere[q+1];
+			players[board[row][column].playersHere[q]].order--;
+			q++;
+
+		}
+
+		board[row][column].capacity--;
+		players[i].dead=true;
+		(*numLeft)--;
+		printf("\nPlayer %d has fallen!", currentPlayer+1);
+	 }
+
+
 }

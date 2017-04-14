@@ -78,7 +78,7 @@ void move(int numofplayers, int currentplayer, int row, int column,struct slot *
 //Implementation of each player's "move" (i.e. Go to another slot, attack or quit the game)
 void printBoard(struct slot **board);
 //prints the board before each player's move
-void attack(int currentPlayer, int attackedPlayer, int attackType);
+void attack(int currentPlayer, int attackedPlayer, int attackType, struct slot **board, int *numLeft);
 //Implements each of the three different types of attacks (near, distant, magic)
 
 
