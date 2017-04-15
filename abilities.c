@@ -116,7 +116,7 @@ void abilities(int numofplayers, int i)
 	printf("Please enter a name for player %d:\n", i+1);
 	scanf("%24s", players[i].name);
 
-
+	//Print the player's stats
     printf("\nPlayer %d's Stats:\n", i+1);
     printf("Name = %s\n", players[i].name);
     printf("Class = %s\n", getClassName(players[i].class));

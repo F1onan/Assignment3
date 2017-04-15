@@ -219,7 +219,7 @@ struct slot * reachDesiredElement(int row, int column, struct slot * initialSlot
 		//if the current slot is at a column and a row equal to the desired column and row, respectively
 		// we found the slot
 		if(currentSlot->column == column && currentSlot->row == row){
-			printf("Found\n");
+			printf("Found\n\n");
 			found = true;
 
 		}
@@ -244,7 +244,7 @@ const char* getSlotName(enum sType slotType)
     	  return "H";
     	  break;
    }
-return "ERROR404";
+return "ERROR404";//This shouldnt be returned
 }
 
 

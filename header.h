@@ -43,7 +43,7 @@ struct Characters *next;
 struct slot //Declare a new structure containing the stats for all players
 {
   enum sType slotType; //Slot type (Ground, City or Hill) for each slot
-  int playersHere[6]; //The player number (between 0 and numofplayers) that is currently occupying this slot
+  int playersHere[6]; //The player number (between 1 and numofplayers) that is currently occupying this slot
   int capacity;//The number of players occupying this slot (0-numofplayers)
 
   int row;

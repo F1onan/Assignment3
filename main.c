@@ -39,10 +39,10 @@ int main(void)
 		board[players[i].row][players[i].column].capacity++;//Set the boolean value, full, for the slot occupied by player #i to be true
 
 		players[i].order=board[players[i].row][players[i].column].capacity-1;//The players position in playersHere
-		board[players[i].row][players[i].column].playersHere[board[players[i].row][players[i].column].capacity-1]=i;//Assign the appropriate slot with the current player
+		board[players[i].row][players[i].column].playersHere[board[players[i].row][players[i].column].capacity-1]=i+1;//Assign the appropriate slot with the current player
 
 
-		printf("Slot = (%d,%d)\n\n", players[i].row, players[i].column);
+		printf("Slot = (%d,%d)\n\n", players[i].row, players[i].column);//Print the player's slot
 	}
 
 	int numLeft = numofplayers;//Number of players remaining
@@ -63,14 +63,14 @@ int main(void)
 		    		players[i].dead=true;
 			}
 		}
-		round++;
+		round++;//Go to the next round
 	 }
 
 	 //Search for the one remaining player who isn't dead
 	 for(i=0; i<numofplayers; i++)
 	 {
 		 if(players[i].dead == false)
-			 printf("\nPlayer #%d (%s) won the game with %.0f health remaining!", i+1, players[i].name, players[i].life);
+			 printf("\n\nPlayer #%d (%s) won the game with %.0f health remaining!", i+1, players[i].name, players[i].life);
 	 }
 
 

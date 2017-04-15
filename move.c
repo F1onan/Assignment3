@@ -5,10 +5,12 @@
 void move(int numofplayers, int currentPlayer, int row, int column, struct slot **board, int *numLeft)
 {
 	unsigned int choice, moveChoice, i, j;
+	//These boolean values will be used to only present the player with valid options for attacking/moving
 	bool upBlocked=false;
 	bool downBlocked=false;
 	bool rightBlocked=false;
 	bool leftBlocked=false;
+
 	bool validChoice=true;//We'll used this boolean value to ensure valid inputs with a do/while loop
 
 	do{
@@ -105,11 +107,11 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 			break;
 		}
 
-
+		//Assign the new slot to the player
 		players[currentPlayer].row = row;
 		players[currentPlayer].column = column;
 
-		//Modify player's cababilties:
+		//Modify player's capabilties:
 		if(board[row][column].slotType == Hill)
 		{
 			if(players[currentPlayer].dexterity < 50 )
@@ -126,11 +128,11 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		}
 
 
-		board[row][column].capacity++;
+		board[row][column].capacity++;//Increase the slot's capacity by one.
 		int k = board[row][column].capacity-1; //k is the position in playershere that will be filled by the new player
-		players[currentPlayer].order=k;
+		players[currentPlayer].order=k;//The player's order/position within the array (will be 0 for the first player here)
 
-		board[row][column].playersHere[k] = currentPlayer;
+		board[row][column].playersHere[k] = currentPlayer+1;
 		//If there are two players on the one slot (ie capacity == 2) then the second player will be stored
 		//in board[][].playershere[1]. Likewise, if the slot will now have 3 players then the newest player will be at playersHere[2].
 		//For playersHere[i], i will always be the capacity of the slot - 1.
@@ -155,7 +157,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		   scanf("%d", &attackChoice);
 		   }while(attackChoice<1 || attackChoice>3);
 
-		     if(attackChoice==1)
+		     if(attackChoice==1)//near attack
 		     {
 		    	//Find which slots have no available targets to attack:
 			    if(row == 0 || board[row][column].up->capacity == 0)
@@ -178,30 +180,30 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 			    	if(upBlocked==false)
 			    	{
 			    		for(i=0; i<board[row][column].up->capacity; i++)
-			    		    attackablePlayers[b++] = board[row][column].up->playersHere[i]+1;
+			    		    attackablePlayers[b++] = board[row][column].up->playersHere[i];
 
 			    	}
 			    	if(downBlocked==false)
 			    	{
 			    		for(i=0; i<board[row][column].down->capacity; i++)
-			    			attackablePlayers[b++] = board[row][column].down->playersHere[i]+1;
+			    			attackablePlayers[b++] = board[row][column].down->playersHere[i];
 			    	}
 			    	if(leftBlocked==false)
 			    	{
 			    		for(i=0; i<board[row][column].left->capacity; i++)
-			    			attackablePlayers[b++] = board[row][column].left->playersHere[i]+1;
+			    			attackablePlayers[b++] = board[row][column].left->playersHere[i];
 			    	}
 			    	if(rightBlocked==false)
 			    	{
 			    		for(i=0; i<board[row][column].right->capacity; i++)
-			    			attackablePlayers[b++] = board[row][column].right->playersHere[i]+1;
+			    			attackablePlayers[b++] = board[row][column].right->playersHere[i];
 			    	}
 			    	if(board[row][column].capacity>1)
 			    	{
 			    		for(i=0; i<board[row][column].capacity; i++)
 			    		{
 			    		  if(players[currentPlayer].order != i)//Don't include the player himself
-			    			  attackablePlayers[b++] = board[row][column].playersHere[i]+1;
+			    			  attackablePlayers[b++] = board[row][column].playersHere[i];
 			    		}
 			    	}
 
@@ -217,7 +219,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 			    	if(attackablePlayers[i]==attackedPlayer)
 			    		validChoice=true;
 			    }
-			    }while(validChoice==false);
+			    }while(validChoice==false);//Ensure a valid choice
 
 			    attack(currentPlayer, attackedPlayer, 1, board, numLeft);
 
@@ -225,7 +227,8 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		     }
 
 			 validChoice=false;
-		     if(attackChoice==2)
+
+		     if(attackChoice==2)//distant attack
 		     {
 		    	struct slot* currSlot = NULL;//Don't point to anything initially
 		    	struct slot* foundSlots;
@@ -233,12 +236,11 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		    	int count = 0;
 		    	int reqDist;
 		    	bool tooClose;
+		    	int k=0; //Counter for attackable players
 
-		    	printf("\nEnter the number of the player you would like to attack.\nPossible choices:\n");
-
-				if(players[currentPlayer].row >= 3)
+				if(players[currentPlayer].row >= 3)//Closer to the bottom
 				{
-					if(players[currentPlayer].column >= 3)
+					if(players[currentPlayer].column >= 3)//Closer to the right
 						currSlot = reachDesiredElement(players[currentPlayer].row,players[currentPlayer].column,&board[6][6]);
 					else
 					/*If the the required slot is closer to the bottom-left
@@ -252,7 +254,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 						currSlot = reachDesiredElement(players[currentPlayer].row,players[currentPlayer].column,&board[0][0]);
 				}
 
-
+			 printf("\nEnter the number of the player you would like to attack.\nPossible choices:\n");
 		     for(i=0; i<7;i++)
 		 		{
 		 			for(j=0; j<7;j++)
@@ -271,13 +273,11 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		 				findSlots(reqDist, 0, currSlot, foundSlots, &count, explored);
 		 			  }
 
-		 			int slotsCapacity;
-
 		 			for(i=0;i<count;i++)
 		 			{
 		 				tooClose = false;
 
-		 				//Figure out which slots in foundSlots are "tooClose" to the current slot (i.e. less than 2 slots away)
+		 				//Figure out which slots in foundSlots are "tooClose" to the current slot (i.e. adjacent slots)
 		 				if(row!=0)
 		 				{
 		 					if((foundSlots[i].row == board[row][column].up->row) && (foundSlots[i].column == board[row][column].up->column))
@@ -298,19 +298,19 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		 					if((foundSlots[i].row == board[row][column].right->row) && (foundSlots[i].column == board[row][column].right->column))
 		 					tooClose=true;
 		 				}
+		 				if(foundSlots[i].row == board[row][column].row && foundSlots[i].column == board[row][column].column)
+		 						tooClose=true;
 
-		 				slotsCapacity = board[foundSlots[i].row][foundSlots[i].column].capacity;
+
+		 				int slotsCapacity = board[foundSlots[i].row][foundSlots[i].column].capacity;
 
 		 				if(tooClose == false && slotsCapacity>0)
 		 				{
 		 					for(b=0;b<slotsCapacity;b++)//Go through the players at this slot
 		 					{
-		 						if(currentPlayer != board[foundSlots[i].row][foundSlots[i].column].playersHere[b])
-		 						{
-		 						//^If this isnt the currentPlayer
-		 						attackablePlayers[b]=board[foundSlots[i].row][foundSlots[i].column].playersHere[b];
-		 						printf("Player %d\n", attackablePlayers[b]+1);
-		 						}
+		 						attackablePlayers[k]=board[foundSlots[i].row][foundSlots[i].column].playersHere[b];
+		 						printf("Player %d\n", attackablePlayers[k]);
+		 						k++;
 		 					}
 		 				}
 
@@ -318,15 +318,22 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 
 		 		}
 
+		 	  if(k==0)//No distant players found
+		 	  {
+		 		  printf("\nThere are no players between 2 and 4 slots away.\nPlayer %d passes this round.", currentPlayer+1);
+		 		  break;
+		 	  }
+
+
 			  do{
 				  validChoice=false;
 			      scanf("%d", &attackedPlayer);
-			      for(i=0;i<b;i++)
+			      for(i=0;i<k;i++)
 			      {
-			    	  if(attackedPlayer == attackablePlayers[i])//If the selected player can de attacked
+			    	  if(attackedPlayer == attackablePlayers[i])//If the selected player can be attacked
 			    		  validChoice=true;
 			      }
-			  }while(validChoice==false);
+			  }while(validChoice==false);//Ensure a valid choice
 
 			  attack(currentPlayer, attackedPlayer, 2, board, numLeft);
 
@@ -375,6 +382,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 	 //If the player died this turn
 	 if(players[currentPlayer].life<1)
 	 {
+		//Take the dead player out of the playersHere array for the slot they were on
 		int q = players[currentPlayer].order-1;
 
 		while (q<board[row][column].capacity-1)
@@ -386,7 +394,7 @@ void move(int numofplayers, int currentPlayer, int row, int column, struct slot 
 		}
 
 		board[row][column].capacity--;
-		players[i].dead=true;
+		players[currentPlayer].dead=true;
 		(*numLeft)--;
 		printf("\nPlayer %d has fallen!", currentPlayer+1);
 	 }

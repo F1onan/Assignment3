@@ -10,7 +10,7 @@ void findSlots(int reqDist, int currDist,  struct slot * currSlot, struct slot *
 		//the current slot was not explored
 		if(explored[currSlot->row][currSlot->column] == false)
 		{
-			//The next availbale position (indicated by count) at foundSlots points to the current slot
+			//The next available position (indicated by count) at foundSlots points to the current slot
 			*(foundSlots + *count) = *currSlot;
 			//the counter is incremented
 			(*count)++;

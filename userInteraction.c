@@ -90,7 +90,7 @@ void printBoard(struct slot **board)
 	printf("\nCurrent Board State:\n");
 	for(a=0;a<=30;a++)
 	{
-		printf("_");
+		printf("_");//Print 30 times
 	}
 
 
@@ -103,10 +103,10 @@ void printBoard(struct slot **board)
 		{
 		 printf("[");
 		 if(board[i][j].capacity > 1)
-		   printf("+"); //Print out the player here
+		   printf("+"); //If there are several players here
 		 else if(board[i][j].capacity == 1)
-		   printf("%d", board[i][j].playersHere[0]+1); //Print out the player here
-		 else if(board[i][j].capacity == 0)
+		   printf("%d", board[i][j].playersHere[0]); //Print out the player here
+		 else
 			 printf(" ");
 		 printf("] ");
 		}

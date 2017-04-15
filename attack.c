@@ -7,6 +7,8 @@ void attack(int currentPlayer, int attackedPlayer, int attackType, struct slot *
 	//NOTE: attackedPlayer is the player NUMBER (Player 1 = 1 etc.)
 	//		while currentPlayer is the player POSITION (i.e. Player 1 = 0)
 
+	printf("\nPlayer %d attacks Player %d.", currentPlayer+1, attackedPlayer);
+
 	switch(attackType)
 	{
 	case 1://near-attack
@@ -22,7 +24,7 @@ void attack(int currentPlayer, int attackedPlayer, int attackType, struct slot *
 		}
 		break;
 
-	case 2:
+	case 2://distant attack
 		if(players[attackedPlayer-1].dexterity>=players[currentPlayer].dexterity)
 		{
 			printf("\nPlayers #%d's life: %.0lf (unchanged)\n", attackedPlayer, players[attackedPlayer-1].life);
@@ -30,7 +32,7 @@ void attack(int currentPlayer, int attackedPlayer, int attackType, struct slot *
 		else if(players[attackedPlayer-1].dexterity<players[currentPlayer].dexterity)
 		{
 			players[attackedPlayer-1].life-= 0.3 * players[currentPlayer].strength;
-			printf("\nPlayers #%d's new life: %.0lf\n", currentPlayer+1, players[currentPlayer].life);
+			printf("\nPlayers #%d's new life: %.0lf\n", attackedPlayer, players[attackedPlayer-1].life);
 		}
 		break;
 
